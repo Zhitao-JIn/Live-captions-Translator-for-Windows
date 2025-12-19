@@ -9,6 +9,7 @@ class Dao
 class Viewer
 
 /'
+    decoupled architecture 
     although all the conponents could be changeable, the first version of them has some language perfer
     CoreComputation:python:fastapi
     CoreApplication:python:fastapi
@@ -18,8 +19,6 @@ class Viewer
     Caption:c#:win11caption
     Dao:sqlite
 '/
-
-'''decoupled architecture '''
 
 class CoreComputation{
     - history : List<TranslationResult>
@@ -115,20 +114,12 @@ package Connectors{
     'be used to connect the Analysis'
 }
 
-
-
 Caption o-- CoreComputation
-
 Translator <-- CoreComputation
-
 Sentencesplitter <-- CoreComputation
-
 Analyzer <-- CoreComputation
-
 CoreApplication <-- Viewer
-
 Dao <-- CoreComputation
-
 CoreComputation <-- CoreApplication
 
 
@@ -136,7 +127,6 @@ CoreComputation <-- CoreApplication
 TranslationResult o-- Translator
 SplitResult o-- Sentencesplitter
 AnalysisResult o-- Analyzer
-
 
 
 
