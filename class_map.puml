@@ -1,0 +1,143 @@
+@startuml
+class CoreComputation 
+class CoreApplication
+class Translator
+class Sentencesplitter
+class Analyzer
+class Caption
+class Dao
+class Viewer
+
+/'
+    although all the conponents could be changeable, the first version of them has some language perfer
+    CoreComputation:python:fastapi
+    CoreApplication:python:fastapi
+    Translator:python: model
+    Analyzer:python:chatgpt/gemini
+    SentenceSplitter:python:model
+    Caption:c#:win11caption
+    Dao:sqlite
+'/
+
+'''decoupled architecture '''
+
+class CoreComputation{
+    - history : List<TranslationResult>
+    - captionsBuffer : List<string>
+    - splitResults : List<SplitResult>
+
+    - translate(text:string)
+    - split(text:string)
+    - getCaption(): string
+    - save(translation: TranslationResult)
+    - analysis(text:string): AnalysisResult
+    - retrieval(query:string): TranslationResult
+}
+
+class CoreApplication{
+    - retrieval(query: string): TranslationResult
+    - analysisWord(word: string): AnalysisResult
+    - analysisSentence(sentence: list<string>) AnalysisResult
+}
+
+class Viewer{
+    - state
+    + display()
+    + chooseWord()
+    + analysis()
+}
+
+class Translator{
+    - sourceLan: string
+    - targetLan: string
+    + Translate(text:string): TranslationResult
+}
+
+class TranslationResult {
+    - originalText: string
+    - translatedText: string
+}
+
+
+class Sentencesplitter{
+    + splite(text:string): SplitResult
+}
+
+class SplitResult {
+    - sentences: list
+    - timestamps: list
+    - tokens: list
+}
+
+class Analyzer{
+    + analysis(words:list<string>): AnalysisResult 
+}
+
+class AnalysisResult {
+    - words: list<string>
+    - meaning: list<string>
+}
+
+class Caption{
+    - start()
+    + get()
+}
+
+class Dao {
+    + saveSubtitle(text:string, timestamp)
+    + saveTranslation(TranslationResult)
+    + query(): TranslationResult
+}
+
+package Connectors{
+    interface Connector{
+        - state
+        - start()
+        - stop()
+
+        - send()
+
+        - onMessage()
+        - onStateChange()
+        - onError()
+    }
+    class CaptionConnecter
+    'be used to connect the win11caption'
+    class SentencesplitterConnecter
+    'be used to connect the sentence splitter'
+    class TranslatorConnecter
+    'be used to connect the Translator
+    class DaoConnecter
+    'be used to connect the Dao'
+    class ViewerConnecter
+    'be used to connect the viewer'
+    class AnalyzerConnecter
+    'be used to connect the Analysis'
+}
+
+
+
+Caption o-- CoreComputation
+
+Translator <-- CoreComputation
+
+Sentencesplitter <-- CoreComputation
+
+Analyzer <-- CoreComputation
+
+CoreApplication <-- Viewer
+
+Dao <-- CoreComputation
+
+CoreComputation <-- CoreApplication
+
+
+
+TranslationResult o-- Translator
+SplitResult o-- Sentencesplitter
+AnalysisResult o-- Analyzer
+
+
+
+
+@enduml
