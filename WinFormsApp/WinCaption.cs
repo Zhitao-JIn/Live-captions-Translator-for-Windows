@@ -37,7 +37,7 @@ public static class WinCaption
         }
         if (Process == null || Process.HasExited)//start new process, if not found or exited
         {
-            _logger.Information("Process not found. Starting new process...");
+            _logger.Warning("Process not found. Starting new process...");
             Process = Process.Start(PROCESS_NAME);
         }
         Thread.Sleep(500);
@@ -48,7 +48,7 @@ public static class WinCaption
         }
         else
         {
-            _logger.Information("no process found after starting.");
+            _logger.Warning("no process found after starting.");
         }
         return Process != null && !Process.HasExited;
     }
@@ -72,7 +72,7 @@ public static class WinCaption
         }
         else
         {
-            _logger.Information("no window found.");
+            _logger.Warning("no window found.");
         }
         return Window != null && Window.Patterns.Window != null;
     }
