@@ -1,0 +1,27 @@
+@startuml
+actor "User" as user1
+database "Translation History" as history
+
+(1.0 Submit History Query) as p1
+(2.0 Retrieve History Records) as p2
+(3.0 Display History) as p3
+
+user1 --> p1 : History Query Request
+p1 --> p2 : Query Parameters
+
+p2 --> history : Query Request
+history --> p2 : Translation History Records
+
+p2 --> p3 : History Data
+
+entity "Caption" as c1
+database "Translation History" as history1
+
+(1.0 Splite Sentences) as p4
+(2.0 Translate) as p5
+c1 --> p4 : "Translate Text"
+p4 --> p5 : "Splited Result"
+p5 --> history1 : "Store Translation Record"
+
+
+@enduml
